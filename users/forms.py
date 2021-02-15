@@ -1,8 +1,14 @@
 from django import forms
 from .models import CustomUser
 from django.core.exceptions import ValidationError
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationForm
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+
+
+class MyAuthenticationForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super(MyAuthenticationForm, self).__init__(*args, **kwargs)
+
 
 
 class UserCreationForm(forms.ModelForm):
