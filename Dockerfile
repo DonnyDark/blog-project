@@ -1,0 +1,11 @@
+FROM python:3.8
+
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /code/
+
+COPY Pipfile Pipfile.lock /code/
+RUN pip install pipenv
+RUN pipenv install --system
+
+COPY . /code/
