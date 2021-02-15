@@ -1,11 +1,12 @@
 from django.views.generic import TemplateView
 from django.contrib.auth.views import LoginView
-from django.conf import settings
+from .forms import MyAuthenticationForm
 
 
 class LogInView(LoginView):
     template_name = 'users/login.html'
-    redirect_field_name = settings.LOGIN_REDIRECT_URL
+    authentication_form = MyAuthenticationForm
+
 
 
 class SignUpView(TemplateView):
