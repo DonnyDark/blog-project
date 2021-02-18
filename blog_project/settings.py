@@ -129,5 +129,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'users.CustomUser'
+AUTHENTICATION_BACKENDS = ['users.backends.CustomBackend']
 
-LOGIN_REDIRECT_URL = '/blog/'
+LOGIN_REDIRECT_URL = 'main_page'
+
+LOGIN_URL = 'login'
+
+LOGOUT_REDIRECT_URL = 'main_page'

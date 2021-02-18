@@ -26,11 +26,14 @@
                     </li>
                     {% if request.user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link active" href="">Log Out</a>
+                        <a class="nav-link active" href="{% url 'logout' %}">Log Out</a>
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link active" href="">Log In</a>
+                        <a class="nav-link active" href="{% url 'login' %}">Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'signup' %}">Sign Up</a>
                     </li>
                     {% endif %}
                 </ul>
