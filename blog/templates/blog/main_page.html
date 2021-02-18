@@ -4,4 +4,12 @@
 
 {% block content %}
 <h1>Main Page</h1>
+
+<h2>Blogs</h2>
+<ul>
+    {% for blog in blog_list %}
+    <li>{{ blog.title }}</li>
+    <li>{{ blog.author }}</li>
+    {% endfor %}
+</ul>
 {% endblock %}
