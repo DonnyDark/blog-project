@@ -8,7 +8,7 @@
 <h2>Blogs</h2>
 <ul>
     {% for blog in blog_list %}
-    <li>{{ blog.title }}</li>
+    <li><a href="{{ blog.get_absolute_url }}">{{ blog.title }}</a></li>
     <li>{{ blog.author }}</li>
     {% endfor %}
 </ul>

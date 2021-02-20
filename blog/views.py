@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import BlogModel
 from .forms import BlogForm
+from django.shortcuts import get_object_or_404
 
 
 class BlogListView(ListView):
@@ -13,6 +14,8 @@ class BlogListView(ListView):
 
 class BlogDetailView(DetailView):
     model = BlogModel
+    context_object_name = 'blog'
+    template_name = 'blog/detail_blog.html'
 
 
 class BlogCreateView(LoginRequiredMixin, CreateView):
