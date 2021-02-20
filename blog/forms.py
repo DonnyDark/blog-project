@@ -1,9 +1,8 @@
-from django.forms import ModelForm
 from .models import BlogModel, BlogCommentModel
 from django import forms
 
 
-class BlogCreationForm(ModelForm):
+class BlogCreationForm(forms.ModelForm):
     class Meta:
         model = BlogModel
         fields = ['title', 'text']
@@ -13,7 +12,7 @@ class BlogCreationForm(ModelForm):
         }
 
 
-class CommentCreationForm(ModelForm):
+class CommentCreationForm(forms.ModelForm):
     class Meta:
         model = BlogCommentModel
         fields = ['text']

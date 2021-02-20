@@ -16,6 +16,24 @@ class BlogDetailView(DetailView):
     context_object_name = 'blog'
     template_name = 'blog/detail_blog.html'
 
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        comments = BlogCommentModel.objects.filter(
+            blog=self.get_object()).order_by('-date_posted')
+        data['comments'] = comments
+        if self.request.user.is_authenticated:
+            data['comment_form'] = CommentCreationForm(instance=self.request.user)
+
+        return data
+
+    def post(self, request, *args, **kwargs):
+        new_comment = BlogCommentModel(text=request.POST.get('text'),
+                                       author=self.request.user,
+                                       blog=self.get_object())
+        new_comment.save()
+        return self.get(self, request, *args, **kwargs)
+
 
 class BlogCreateView(LoginRequiredMixin, CreateView):
     model = BlogModel
@@ -25,9 +43,3 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
-
-
-class CommentCreateView(LoginRequiredMixin, CreateView):
-    model = BlogCommentModel
-    template_name = 'blog/detail_blog.html'
-    form_class = CommentCreationForm

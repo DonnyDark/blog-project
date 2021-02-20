@@ -10,6 +10,10 @@
     {% for blog in blog_list %}
     <li><a href="{{ blog.get_absolute_url }}">{{ blog.title }}</a></li>
     <li>{{ blog.author }}</li>
+    <li>{{ blog.liked }}</li>
+    <li>{{ blog.viewed }}</li>
+    <li>{{ blog.published_date }}</li>
+    <li>{{ blog.number_of_comments }}</li>
     {% endfor %}
 </ul>
 {% endblock %}
