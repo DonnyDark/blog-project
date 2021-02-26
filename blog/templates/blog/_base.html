@@ -20,29 +20,27 @@
         <nav class="container-xxl flex-wrap flex-md-nowrap">
             <a class="navbar-brand" href="{% url 'main_page' %}">Blog</a>
             <div class="collapse navbar-collapse">
-                <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="">About</a>
-                    </li>
+                <div class="dropdown ms-md-auto">
                     {% if request.user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'blog_create' %}">+Create</a>
-                    </li>
-                    <li class="nav-item">
-                        <h5 style="color: white;" >Hello {{ user.get_username }}</h5>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'logout' %}">Log Out</a>
-                    </li>
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            Hello {{ request.user.username }}
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li class="nav-item"><a class="dropdown-item nav-item active" href="users/{{ request.user.username }}/">User Room</a></li>
+                            <li class="nav-item"><a class="dropdown-item" href="">About</a></li>
+                            <li class="nav-item"><a class="dropdown-item" href="{% url 'logout' %}">Log Out</a></li>
+                        </ul>
                     {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'login' %}">Log In</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'signup' %}">Sign Up</a>
-                    </li>
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            Menu
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li class="nav-item"><a class="dropdown-item" href="{% url 'login' %}">Log In</a></li>
+                            <li class="nav-item"><a class="dropdown-item" href="{% url 'signup' %}">Sign Up</a></li>
+                            <li class="nav-item"><a class="dropdown-item" href="">About</a></li>
+                        </ul>
                     {% endif %}
-                </ul>
+                </div>
             </div>
         </nav>
     </header>
