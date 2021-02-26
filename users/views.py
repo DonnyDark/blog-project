@@ -1,9 +1,12 @@
 from django.contrib.auth import views as auth_views
 from django.views import generic
 from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model
 
 from .forms import LoginForm, RegisterForm
 
+
+UserModel = get_user_model()
 
 class LoginView(auth_views.LoginView):
     authentication_form = LoginForm
@@ -19,3 +22,8 @@ class SignupView(generic.CreateView):
 class UserView(generic.DetailView):
     template_name = 'users/user.html'
     context_object_name = 'user'
+
+    def get_queryset(self):
+        queryset = UserModel.objects.filter(username=self.request.user.username)
+        return queryset
+

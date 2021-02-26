@@ -1,5 +1,4 @@
-from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import BlogModel, BlogCommentModel
 from .forms import BlogCreationForm, CommentCreationForm
@@ -43,3 +42,7 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+
+class AboutView(TemplateView):
+    template_name = 'blog/about.html'
