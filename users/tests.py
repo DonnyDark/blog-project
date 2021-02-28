@@ -1,5 +1,6 @@
 from django.test import TestCase
 from .models import CustomUser
+from .views import LoginView, SignupView, UserView
 
 
 class CustomUserTestCase(TestCase):
@@ -21,3 +22,4 @@ class CustomUserTestCase(TestCase):
         self.assertNotEqual(superuser.password, 'SuperuserPass')
         self.assertEqual(superuser.is_active, True)
         self.assertEqual(superuser.is_admin, True)
+
