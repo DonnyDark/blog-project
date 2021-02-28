@@ -1,6 +1,8 @@
 from django.test import TestCase
 from .models import BlogModel, BlogCommentModel
 from django.contrib.auth import get_user_model
+from .views import BlogListView, BlogDetailView, BlogCreateView, AboutView
+from django.urls import reverse
 
 UserModel = get_user_model()
 
@@ -31,3 +33,63 @@ class ModelsTestCase(TestCase):
         self.assertEqual(comment.blog, blog)
         self.assertEqual(str(comment), f"{self.user.username}'s comment for {blog.title}")
 
+
+class ListViewTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        UserModel.objects.create(username='User', email='user@example.com', password='UserPass')
+        user = UserModel.objects.get(username='User', email='user@example.com', password='UserPass')
+        number_of_blogs = 15
+        for blog in range(number_of_blogs):
+            BlogModel.objects.create(author=user, title=f'TestTitle{blog}', text=f'TestText{blog}')
+
+    def test_view_url_exists_at_desired_location(self):
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        response = self.client.get(reverse('main_page'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        response = self.client.get(reverse('main_page'))
+        self.assertTemplateUsed(response, 'blog/main_page.html')
+
+    def test_pagination_is_ten(self):
+        response = self.client.get(reverse('main_page'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('is_paginated' in response.context)
+        self.assertTrue(response.context['is_paginated'] == True)
+        self.assertTrue(len(response.context['blog_list']) == 10)
+
+    def test_lists_all_blogs(self):
+        response = self.client.get(reverse('main_page')+'?page=2')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('is_paginated' in response.context)
+        self.assertTrue(response.context['is_paginated'] == True)
+        self.assertTrue(len(response.context['blog_list']) == 5)
+
+
+class BlogCreateViewTestCase(TestCase):
+    def setUp(self):
+        UserModel.objects.create(username='user1', email='user1@example.com', password='user1pass')
+        user1 = UserModel.objects.get(username='user1')
+
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(reverse('blog_create'))
+        self.assertRedirects(response, '/users/login/?next=/create/')
+
+    '''
+    def test_logged_in_uses_correct_template(self):
+        login = self.client.login(username='user1', password='user1pass')
+        response = self.client.get(reverse('blog_create'))
+        print(response.context)
+        self.assertEqual(str(response.context['user']), 'user1')
+        self.assertEqual(response.status_code, 200)
+
+        self.assertTemplateUsed(response, 'blog/blog_create.html')
+
+    def test_user_correct_create_new_blog(self):
+        login = self.client.login(username='user1', password='user1pass')
+        # response = self.client.post()
+'''
