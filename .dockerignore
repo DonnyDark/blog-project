@@ -3,3 +3,4 @@
 .idea
 docker-compose.yml
 Dockerfile
+docker-compose-prod.yml
