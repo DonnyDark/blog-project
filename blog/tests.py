@@ -2,7 +2,9 @@ from django.test import TestCase
 from .models import BlogModel, BlogCommentModel
 from django.contrib.auth import get_user_model
 from .views import BlogListView, BlogDetailView, BlogCreateView, AboutView
+from .forms import BlogCreationForm, CommentCreationForm
 from django.urls import reverse
+from django.test.client import Client
 
 UserModel = get_user_model()
 
@@ -72,24 +74,49 @@ class ListViewTestCase(TestCase):
 
 class BlogCreateViewTestCase(TestCase):
     def setUp(self):
+        self.client = Client()
         UserModel.objects.create(username='user1', email='user1@example.com', password='user1pass')
-        user1 = UserModel.objects.get(username='user1')
 
     def test_redirect_if_not_logged_in(self):
         response = self.client.get(reverse('blog_create'))
         self.assertRedirects(response, '/users/login/?next=/create/')
 
-    '''
     def test_logged_in_uses_correct_template(self):
-        login = self.client.login(username='user1', password='user1pass')
+        self.client.force_login(UserModel.objects.get_or_create(username='user1')[0])
         response = self.client.get(reverse('blog_create'))
-        print(response.context)
-        self.assertEqual(str(response.context['user']), 'user1')
         self.assertEqual(response.status_code, 200)
-
         self.assertTemplateUsed(response, 'blog/blog_create.html')
 
     def test_user_correct_create_new_blog(self):
         login = self.client.login(username='user1', password='user1pass')
         # response = self.client.post()
-'''
+
+
+class BlogCreationAndCommentCreationFormsTestCase(TestCase):
+    def setUp(self):
+        UserModel.objects.create(username='testuser', email='test@email.com', password='testpass')
+        self.user = UserModel.objects.get(username='testuser')
+        BlogModel.objects.create(title='test_title', author=self.user, text='test_text')
+        self.blog = BlogModel.objects.get(title='test_title')
+        BlogCommentModel.objects.create(blog=self.blog, author=self.user, text='test_comment')
+        self.comment = BlogCommentModel.objects.get(text='test_comment')
+
+    def test_blog_creation_valid_form(self):
+        data = {'title': self.blog.title, 'text': self.blog.text, 'author': self.blog.author}
+        form = BlogCreationForm(data=data)
+        self.assertTrue(form.is_valid())
+
+    def test_blog_creation_invalid_form(self):
+        data = {'title': self.blog.title}
+        form = BlogCreationForm(data=data)
+        self.assertFalse(form.is_valid())
+
+    def test_comment_creation_valid_form(self):
+        data = {'blog': self.comment.blog, 'author': self.comment.author, 'text': self.comment.text}
+        form = CommentCreationForm(data=data)
+        self.assertTrue(form.is_valid())
+
+    def test_comment_creation_invalid_form(self):
+        data = {}
+        form = CommentCreationForm(data=data)
+        self.assertFalse(form.is_valid())
