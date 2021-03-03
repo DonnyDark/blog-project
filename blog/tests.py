@@ -1,7 +1,6 @@
 from django.test import TestCase
 from .models import BlogModel, BlogCommentModel
 from django.contrib.auth import get_user_model
-from .views import BlogListView, BlogDetailView, BlogCreateView, AboutView
 from .forms import BlogCreationForm, CommentCreationForm
 from django.urls import reverse
 from django.test.client import Client
