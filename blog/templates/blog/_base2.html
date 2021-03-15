@@ -1,0 +1,27 @@
+{% extends 'blog/_base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content">
+    {% block main %}
+    {% endblock %}
+</main>
+<div class="col-md-3 col-2 bd-sidebar">
+    <div class="collapse d-md-block row">
+    <nav class="bd-links">
+        <div class="bd-toc-item">
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            </form>
+        </div>
+        <div class="bd-toc-item">
+            <a class="bd-toc-link">New</a>
+        </div><div class="bd-toc-item">
+            <a class="bd-toc-link">The Best</a>
+        </div><div class="bd-toc-item">
+            <a class="bd-toc-link">The Most Popular</a>
+        </div>
+    </nav>
+    </div>
+</div>
+{% endblock %}

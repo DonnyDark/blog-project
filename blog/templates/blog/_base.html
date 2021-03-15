@@ -17,14 +17,16 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-    <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar bg-dark">
-            <a class="navbar-brand mr-0 mr-md-2" href="{% url 'main_page' %}">Blog</a>
-            <div class="btn btn-bd-download mb-3 mb-md-0 ml-md-auto">
-                <div class="dropdown ms-md-auto">
+    <div class="container bg-light">
+    <header>
+        <nav class="navbar navbar-light bg-light navbar-expand flex-column flex-md-row bd-navbar">
+            <a class="navbar-brand" href="{% url 'main_page' %}">Blog</a>
+            <ul class="navbar-nav ml-md-auto">
+                <li class="nav-item dropdown">
                     {% if request.user.is_authenticated %}
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-item nav-link dropdown-toggle mr-md-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Hello {{ request.user.username }}
-                        </button>
+                        </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li class="nav-item"><a class="dropdown-item" href="users/{{ request.user.username }}/">User Room</a></li>
                             <li class="nav-item"><a class="dropdown-item" href="{% url 'blog_create' %}">Create Blog</a></li>
@@ -32,7 +34,7 @@
                             <li class="nav-item"><a class="dropdown-item" href="{% url 'logout' %}">Log Out</a></li>
                         </ul>
                     {% else %}
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Menu
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -41,15 +43,13 @@
                             <li class="nav-item"><a class="dropdown-item" href="{% url 'about_page' %}">About</a></li>
                         </ul>
                     {% endif %}
-                </div>
-            </div>
+                </li>
+            </ul>
+        </nav>
     </header>
-    <div class="container">
         <div class="row flex-xl-nowrap">
-                <main class="col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content">
-                    {% block content %}
-                    {% endblock %}
-                </main>
+        {% block content %}
+        {% endblock %}
         </div>
     </div>
 
