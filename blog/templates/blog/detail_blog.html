@@ -1,4 +1,6 @@
 {% extends 'blog/_base.html' %}
+{% load static %}
+
 
 {% block title %}Detail Blog{% endblock %}
 
@@ -8,6 +10,13 @@
 <h3>{{ blog.text }}</h3>
 <h4>{{ blog.published_date }}</h4>
 
+<!-- like section -->
+<a>
+    <div><img src="{% static 'blog/images/like.png' %}" class="like-icon"></div>
+    <div class="total-likes"><span>{{ blog.total_likes }}</span></div>
+</a>
+
+<!-- comment section -->
 <h2>Leave your comment!</h2>
 <div id="comment-section">
     {% if user.is_authenticated %}
@@ -43,6 +52,7 @@
     {% else %}
         <strong class="text-secondary">No comments yet...</strong>
     {% endif %}
-
 </div>
+
+
 {% endblock %}

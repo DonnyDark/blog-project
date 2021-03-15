@@ -2,6 +2,10 @@ import uuid
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.fields import GenericRelation
+from django.urls import reverse
+
+from likes.models import Like
 
 UserModel = get_user_model()
 
@@ -11,20 +15,23 @@ class BlogModel(models.Model):
     author = models.ForeignKey(UserModel, on_delete=models.CASCADE)
     title = models.CharField(max_length=150)
     text = models.TextField()
-    created_date = models.DateTimeField(default=timezone.now, editable=False)
     published_date = models.DateTimeField(default=timezone.now, editable=True)
-    liked = models.IntegerField(editable=True, blank=True, null=True)
-    viewed = models.IntegerField(editable=True, blank=True, null=True)
+    # tags = models.CharField()
+    likes = GenericRelation(Like)
 
     def __str__(self):
         return self.title + ', ' + self.author.username
 
     def get_absolute_url(self):
-        return f'/{self.pk}/'
+        return reverse('blog_detail', args=[str(self.id)])
 
     @property
     def number_of_comments(self):
         return BlogCommentModel.objects.filter(blog=self).count()
+
+    @property
+    def total_likes(self):
+        return self.likes.count()
 
 
 class BlogCommentModel(models.Model):

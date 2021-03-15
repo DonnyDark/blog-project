@@ -1,18 +1,22 @@
 {% extends 'blog/_base.html' %}
+{% load static %}
 
 {% block title %}Blog{% endblock %}
 
 {% block content %}
-<h1>Main Page</h1>
+<div class="d-md-flex flex-md-row-reverse align-items-center justify-content-between">
+    <a><img class="index_icon" src="{% static 'blog/images/index.png' %}"></a>
+</div>
 
-<h2>Blogs</h2>
 {% for blog in blog_list %}
 <div class="container">
     <ul>
+        <li><a href="{{ blog.author.get_absolute_url }}">Author: {{ blog.author }}</a></li>
         <li><a href="{{ blog.get_absolute_url }}">{{ blog.title }}</a></li>
-        <li>Author: {{ blog.author }}</li>
+        <li>Text: {{ blog.text }}</li>
         <li>Pub Date: {{ blog.published_date }}</li>
         <li>Comments: {{ blog.number_of_comments }}</li>
+        <li>Likes: {{ blog.total_likes }}</li>
     </ul>
 </div>
 {% endfor %}

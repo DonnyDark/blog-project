@@ -40,9 +40,13 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
 
+    # 3rd party
+    'crispy_forms',
+
     # Local
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
+    'likes.apps.LikesConfig',
 ]
 
 MIDDLEWARE = [
@@ -148,6 +152,8 @@ EMAIL_HOST_USER = ''
 EMAIL_PORT = 587
 EMAIL_USER_SSL = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 ENVIRONMENT = os.environ.get('ENVIRONMENT', default='development')
 

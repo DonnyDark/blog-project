@@ -1,5 +1,7 @@
 {% extends 'blog/_base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block title %}SignUp{% endblock %}
 
 {% block content %}
@@ -8,7 +10,7 @@
 <h4>The username will be used as the name of article author!</h4>
 <form action="{% url 'signup' %}" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form|crispy }}
     <button type="submit" if="submit">Sign Up</button>
 </form>
 {% endblock %}

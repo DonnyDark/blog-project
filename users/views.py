@@ -27,4 +27,3 @@ class UserView(generic.DetailView):
     def get_queryset(self):
         queryset = UserModel.objects.filter(username=self.request.user.username)
         return queryset
-
