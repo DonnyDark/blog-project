@@ -43,3 +43,5 @@ class BlogCommentModel(models.Model):
 
     def __str__(self):
         return str(self.author.username) + "'s comment for " + self.blog.title
+
+

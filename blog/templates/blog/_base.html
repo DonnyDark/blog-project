@@ -34,9 +34,9 @@
                             <li class="nav-item"><a class="dropdown-item" href="{% url 'logout' %}">Log Out</a></li>
                         </ul>
                     {% else %}
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Menu
-                        </button>
+                        <a class="nav-item nav-link dropdown-toggle mr-md-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Hello {{ request.user.username }}
+                        </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li class="nav-item"><a class="dropdown-item" href="{% url 'login' %}">Log In</a></li>
                             <li class="nav-item"><a class="dropdown-item" href="{% url 'signup' %}">Sign Up</a></li>
