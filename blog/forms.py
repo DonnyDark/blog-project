@@ -13,6 +13,7 @@ class BlogCreationForm(forms.ModelForm):
             'text': forms.Textarea(attrs={'cols': 80, 'rows': 10, 'placeholder': 'Starting typing your article...'})
         }
 
+
 class CommentCreationForm(forms.ModelForm):
     class Meta:
         model = BlogCommentModel

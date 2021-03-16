@@ -6,7 +6,7 @@ from .forms import BlogCreationForm, CommentCreationForm
 
 class BlogListView(ListView):
     model = BlogModel
-    context_object_name = 'blog_list'
+    context_object_name = 'blog_objects'
     template_name = 'blog/main_page.html'
     paginate_by = 10
 
