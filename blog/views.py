@@ -3,6 +3,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from .models import BlogModel, BlogCommentModel
 from .forms import BlogCreationForm, CommentCreationForm
+from likes.models import Like
+from likes.services import add_like, is_fan
 
 
 class BlogListView(ListView):
@@ -10,6 +12,19 @@ class BlogListView(ListView):
     context_object_name = 'blog_objects'
     template_name = 'blog/main_page.html'
     paginate_by = 10
+
+    def get_queryset(self):
+        queryset = self.model.objects.all()
+
+        if self.request.user.is_authenticated:
+            user = self.request.user
+            for query in queryset:
+                try:
+                    query.likes.get(user=user)
+                    query.is_liked = True
+                except:
+                    query.is_liked = False
+        return queryset
 
 
 class BlogDetailView(DetailView):

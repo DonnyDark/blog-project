@@ -26,44 +26,43 @@
                             <div class="navbar-nav mr-auto">
                                 <ul class="navbar-nav bd-navbar-nav flex-row">
                                     <li class="nav-item px-1">
-                                        <div>
-                                            <a class="nav-link" href="">
+                                            <a class="nav-link active" href="">
+                                                {% if blog.is_liked %}
                                                 <span>
-                                                    <img class="like-icon" src="{% static 'blog/images/like.png' %}">
+                                                    <img class="like-icon" src="{% static 'blog/images/active_like.png' %}">
+                                                </span>
+                                                <span class="total-likes">{{ blog.total_likes }}</span>
+                                                {% else %}
+                                                <span>
+                                                    <img class="like-icon" src="{% static 'blog/images/simple_like.jpg' %}">
                                                 </span>
                                                 <span>{{ blog.total_likes }}</span>
+                                                {% endif %}
                                             </a>
-                                        </div>
                                     </li>
                                     <li class="nav-item px-1">
-                                        <div>
                                             <a class="nav-link" href="{{ blog.get_absolute_url }}">
                                                 <span>
                                                     <img class="comment-icon" src="{% static 'blog/images/comment-icon.webp' %}">
                                                 </span>
                                                 <span>{{ blog.number_of_comments }}</span>
                                             </a>
-                                        </div>
                                     </li>
                                     <li class="nav-item px-1">
-                                        <div>
                                             <a class="nav-link">
                                                 <span>
                                                     <img class="repost-icon" src="{% static 'blog/images/reposts.jpeg' %}">
                                                 </span>
                                                 <span>0</span>
                                             </a>
-                                        </div>
                                     </li>
                                     <li class="nav-item px-1">
-                                        <div>
                                             <a class="nav-link" href="{{ blog.get_absolute_url }}">
                                                 <span>
                                                     <img class="viewed-icon" src="{% static 'blog/images/viewed.png' %}">
                                                 </span>
                                                 <span>0</span>
                                             </a>
-                                        </div>
                                     </li>
                                 </ul>
                             </div>
