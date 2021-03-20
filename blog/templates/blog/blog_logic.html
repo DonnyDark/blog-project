@@ -26,6 +26,12 @@
                             <div class="navbar-nav mr-auto">
                                 <ul class="navbar-nav bd-navbar-nav flex-row">
                                     <li class="nav-item px-1">
+                                        <form action="{{ blog.get_absolute_url }}" method="post">
+                                            {%  csrf_token %}
+                                            <button name="like" value="like">Like</button>
+                                        </form>
+                                    </li>
+                                    <li class="nav-item px-1">
                                             <a class="nav-link active" href="">
                                                 {% if blog.is_liked %}
                                                 <span>

@@ -1,6 +1,7 @@
 from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponseForbidden
 from .models import BlogModel, BlogCommentModel
 from .forms import BlogCreationForm, CommentCreationForm
 from likes.models import Like
@@ -44,10 +45,21 @@ class BlogDetailView(DetailView):
         return data
 
     def post(self, request, *args, **kwargs):
-        new_comment = BlogCommentModel(text=request.POST.get('text'),
-                                       author=self.request.user,
-                                       blog=self.get_object())
-        new_comment.save()
+        object = self.get_object()
+        if request.POST.get('like'):
+            if self.request.user.is_authenticated:
+                user = self.request.user
+                if object.likes.filter(user=user):
+                    object.likes.filter(user=user).delete()
+                else:
+                    object.likes.create(user=user)
+            else:
+                return HttpResponseForbidden
+        elif request.POST.get('text'):
+            new_comment = BlogCommentModel(text=request.POST.get('text'),
+                                           author=self.request.user,
+                                           blog=self.get_object())
+            new_comment.save()
         return self.get(self, request, *args, **kwargs)
 
 
