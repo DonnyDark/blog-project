@@ -20,10 +20,9 @@ class BlogListView(ListView):
         if self.request.user.is_authenticated:
             user = self.request.user
             for query in queryset:
-                try:
-                    query.likes.get(user=user)
+                if query.likes.filter(user=user):
                     query.is_liked = True
-                except:
+                else:
                     query.is_liked = False
         return queryset
 
@@ -33,6 +32,16 @@ class BlogDetailView(DetailView):
     context_object_name = 'blog'
     template_name = 'blog/detail_blog.html'
 
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if self.request.user.is_authenticated:
+            user = self.request.user
+            if obj.likes.filter(user=user):
+                obj.is_liked = True
+            else:
+                obj.is_liked = False
+        return obj
+
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
 
@@ -41,7 +50,6 @@ class BlogDetailView(DetailView):
         data['comments'] = comments
         if self.request.user.is_authenticated:
             data['comment_form'] = CommentCreationForm(instance=self.request.user)
-
         return data
 
     def post(self, request, *args, **kwargs):
