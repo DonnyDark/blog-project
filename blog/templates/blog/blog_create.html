@@ -5,11 +5,19 @@
 {% block title %}Create Blog{% endblock %}
 
 {% block content %}
-<div>
+<div class="bg-light container">
     <form method="post" action="{% url 'blog_create' %}">
         {% csrf_token %}
         {{ form|crispy }}
+        {% for body_form in body_forms %}
+            {{ body_form|crispy }}
+        {% endfor %}
         <button type="submit" id="submit">POST</button>
+    </form>
+    <form method="get">
+        {% csrf_token %}
+        <button class="btn btn-outline-primary" name="image" value="image">Add Image</button>
+        <button class="btn btn-outline-primary" name="text" value="text">Add Text</button>
     </form>
 </div>
 {% endblock %}

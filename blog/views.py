@@ -1,8 +1,13 @@
+from django.shortcuts import render
+from django.http import HttpResponse
 from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden
+
 from .models import BlogModel, BlogCommentModel
 from .forms import BlogCreationForm, CommentCreationForm
+
+from texts_and_images.forms import TextCreationForm, ImageCreationForm
 
 
 class BlogListView(ListView):
@@ -80,10 +85,22 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
     model = BlogModel
     template_name = 'blog/blog_create.html'
     form_class = BlogCreationForm
+    text_or_image_forms = []
 
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
+    def get(self, request, *args, **kwargs):
+        if request.GET.get('text'):
+            self.text_or_image_forms.append(TextCreationForm())
+        elif request.GET.get('image'):
+            self.text_or_image_forms.append(ImageCreationForm())
+        elif not request.GET.get('text') and not request.GET.get('image'):
+            del(self.text_or_image_forms[:])
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        data['body_forms'] = self.text_or_image_forms
+        return data
 
 
 class AboutView(TemplateView):

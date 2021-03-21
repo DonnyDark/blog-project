@@ -14,7 +14,6 @@ class BlogModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     author = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='author')
     title = models.CharField(max_length=150)
-    text = models.TextField()
     published_date = models.DateTimeField(default=timezone.now, editable=True)
     tags = models.CharField(max_length=500)
     likes = GenericRelation(Like)
@@ -41,7 +40,7 @@ class BlogCommentModel(models.Model):
     author = models.ForeignKey(UserModel, on_delete=models.CASCADE)
     text = models.TextField(null=False, blank=False, editable=True)
     date_posted = models.DateTimeField(default=timezone.now, editable=False)
-    # LIKES = 'REQUIRED'
+    likes = GenericRelation(Like)
 
     def __str__(self):
         return str(self.author.username) + "'s comment for " + self.blog.title
