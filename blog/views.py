@@ -1,11 +1,8 @@
 from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
 from django.http import HttpResponseForbidden
 from .models import BlogModel, BlogCommentModel
 from .forms import BlogCreationForm, CommentCreationForm
-from likes.models import Like
-from likes.services import add_like, is_fan
 
 
 class BlogListView(ListView):
@@ -16,6 +13,7 @@ class BlogListView(ListView):
 
     def get_queryset(self):
         queryset = self.model.objects.all()
+
 
         if self.request.user.is_authenticated:
             user = self.request.user
@@ -31,6 +29,13 @@ class BlogDetailView(DetailView):
     model = BlogModel
     context_object_name = 'blog'
     template_name = 'blog/detail_blog.html'
+
+    def get(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            obj = self.model.objects.get(id=self.get_object().id)
+            obj.views += 1
+            obj.save()
+        return super().get(self, request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
@@ -53,14 +58,14 @@ class BlogDetailView(DetailView):
         return data
 
     def post(self, request, *args, **kwargs):
-        object = self.get_object()
+        obj = self.get_object()
         if request.POST.get('like'):
             if self.request.user.is_authenticated:
                 user = self.request.user
-                if object.likes.filter(user=user):
-                    object.likes.filter(user=user).delete()
+                if obj.likes.filter(user=user):
+                    obj.likes.filter(user=user).delete()
                 else:
-                    object.likes.create(user=user)
+                    obj.likes.create(user=user)
             else:
                 return HttpResponseForbidden
         elif request.POST.get('text'):

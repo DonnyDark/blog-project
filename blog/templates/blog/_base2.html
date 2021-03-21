@@ -4,8 +4,9 @@
 {% block content %}
 <div class="col-md-3 col-xl-2 bd-sidebar">
     <div class="">
-        <form class="my-2 bd-search d-flex align-items-center">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <form action="{% url 'main_page' %}" method="get" class="my-2 bd-search d-flex align-items-center">
+            {% csrf_token %}
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q_text">
         </form>
     </div>
     <div class="d-flex align-items-center">

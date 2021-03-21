@@ -1,16 +1,15 @@
 from django import forms
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
 from .models import BlogModel, BlogCommentModel
 
 
 class BlogCreationForm(forms.ModelForm):
     class Meta:
         model = BlogModel
-        fields = ['title', 'text']
+        fields = ['title', 'text', 'tags']
         widgets = {
             'title': forms.TextInput(attrs={'placeholder': 'Please add a title. Max: 50 characters'}),
-            'text': forms.Textarea(attrs={'cols': 80, 'rows': 10, 'placeholder': 'Starting typing your article...'})
+            'text': forms.Textarea(attrs={'cols': 80, 'rows': 10, 'placeholder': 'Starting typing your article...'}),
+            'tags': forms.TextInput(attrs={'placeholder': 'Please add tags separated by commas. Max: 500 characters'})
         }
 
 

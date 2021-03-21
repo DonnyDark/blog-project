@@ -10,6 +10,7 @@ gunicorn = "*"
 dj-database-url = "*"
 whitenoise = "*"
 django-crispy-forms = "*"
+pillow = "*"
 
 [dev-packages]
 

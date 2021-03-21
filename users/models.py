@@ -38,11 +38,14 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(primary_key=True, max_length=30, unique=True, null=False, blank=False)
     email = models.EmailField(validators=[validators.EmailValidator], unique=True)
+
     USERNAME_FIELD = 'username'
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = ['email']
+
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+
     objects = CustomUserManager()
 
     def get_absolute_url(self):
