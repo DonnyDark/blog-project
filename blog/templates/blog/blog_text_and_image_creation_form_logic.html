@@ -1,0 +1,21 @@
+{% load static %}
+
+<div class="form-group">
+    <h2>{{ body_forms }}</h2>
+    <h2>{{ number_of_forms }}</h2>
+    {% for name in body_forms %}
+    {% if 'text' in name %}
+    <label class="">Text</label>
+    <div class="">
+        <textarea class="textarea form-control" name="{{ name }}" cols="80" rows="5" placeholder="Starting typing your article..."></textarea>
+    </div>
+    {% elif 'image' in name %}
+    <label class="">Image</label>
+    <div class="">
+        <input class="clearablefileinput form-control-file" type="file" name="{{ name }}" accept="image/">
+        {% block image %}
+        {% endblock %}
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>

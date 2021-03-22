@@ -9,15 +9,14 @@
     <form method="post" action="{% url 'blog_create' %}">
         {% csrf_token %}
         {{ form|crispy }}
-        {% for body_form in body_forms %}
-            {{ body_form|crispy }}
-        {% endfor %}
+        {% include "blog/blog_text_and_image_creation_form_logic.html" %}
         <button type="submit" id="submit">POST</button>
     </form>
     <form method="get">
         {% csrf_token %}
         <button class="btn btn-outline-primary" name="image" value="image">Add Image</button>
         <button class="btn btn-outline-primary" name="text" value="text">Add Text</button>
+        <button class="btn btn-outline-primary" name="delete_form" value="delete">Delete Form</button>
     </form>
 </div>
 {% endblock %}

@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.http import HttpResponseNotModified, HttpResponse
 from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden
@@ -8,6 +8,7 @@ from .models import BlogModel, BlogCommentModel
 from .forms import BlogCreationForm, CommentCreationForm
 
 from texts_and_images.forms import TextCreationForm, ImageCreationForm
+from texts_and_images.models import TextOrImage
 
 
 class BlogListView(ListView):
@@ -18,7 +19,6 @@ class BlogListView(ListView):
 
     def get_queryset(self):
         queryset = self.model.objects.all()
-
 
         if self.request.user.is_authenticated:
             user = self.request.user
@@ -86,21 +86,66 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
     template_name = 'blog/blog_create.html'
     form_class = BlogCreationForm
     text_or_image_forms = []
+    number_of_forms = [0, ]
+
+    def form_valid(self, form):
+        blog = form.save(commit=False)
+        blog.author = self.request.user
+        blog.save()
+        return super().form_valid(form)
 
     def get(self, request, *args, **kwargs):
         if request.GET.get('text'):
-            self.text_or_image_forms.append(TextCreationForm())
+            self.text_or_image_forms.append('text'+str(self.number_of_forms[-1]))
+            self.number_of_forms.append(len(self.text_or_image_forms))
         elif request.GET.get('image'):
-            self.text_or_image_forms.append(ImageCreationForm())
+            self.text_or_image_forms.append('image'+str(self.number_of_forms[-1]))
+            self.number_of_forms.append(len(self.text_or_image_forms))
+        elif request.GET.get('delete_form'):
+            if not self.text_or_image_forms:
+                pass
+            else:
+                del(self.text_or_image_forms[-1])
+                del(self.number_of_forms[-1])
         elif not request.GET.get('text') and not request.GET.get('image'):
             del(self.text_or_image_forms[:])
+            del(self.number_of_forms[1:])
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-
         data['body_forms'] = self.text_or_image_forms
+        data['number_of_forms'] = self.number_of_forms
         return data
+
+    def post(self, request, *args, **kwargs):
+        texts = []
+        if request.POST.get('text'):
+            for i in range(len(request.POST.get('text'))):
+                if request.POST.get('text')[i] == '':
+                    return HttpResponseNotModified
+                else:
+                    texts.append(request.POST.get('text')[i])
+        images = []
+        if request.POST.get('image'):
+            for image in request.POST.get('image'):
+                if image == '':
+                    return HttpResponseNotModified
+                else:
+                    images.append(image)
+
+        if self.text_or_image_forms:
+            for form in self.text_or_image_forms:
+                if form == TextCreationForm:
+                    new_text = TextOrImage(blog=self.get_object(), text=texts[0], image=None)
+                    new_text.save()
+                    del(texts[0])
+                if form == ImageCreationForm:
+                    new_image = TextOrImage(blog=self.get_object(), image=image[0], text=None)
+                    new_image.save()
+                    del(image[0])
+
+        return super().post(request, *args, **kwargs)
 
 
 class AboutView(TemplateView):
