@@ -15,7 +15,9 @@
                         </nav>
                         <!--main blog story or image -->
                         <div class="mx-5">
-                            <p>{{ blog.text_or_image }}</p>
+                            {% for main_info in text_or_image %}
+                            <p>{{ main_info.text }}</p>
+                            {% endfor %}
                         </div>
                         <!-- tags -->
                         <nav class="navbar navbar-expand-lg navbar-light bg-light ml-3">

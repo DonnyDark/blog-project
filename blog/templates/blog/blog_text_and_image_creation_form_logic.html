@@ -1,8 +1,6 @@
 {% load static %}
 
 <div class="form-group">
-    <h2>{{ body_forms }}</h2>
-    <h2>{{ number_of_forms }}</h2>
     {% for name in body_forms %}
     {% if 'text' in name %}
     <label class="">Text</label>

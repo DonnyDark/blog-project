@@ -55,6 +55,9 @@ class BlogDetailView(DetailView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
 
+        text_or_image = TextOrImage.objects.filter(blog=self.get_object())
+        data['text_or_image'] = text_or_image
+
         comments = BlogCommentModel.objects.filter(
             blog=self.get_object()).order_by('-date_posted')
         data['comments'] = comments
@@ -89,9 +92,22 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
     number_of_forms = [0, ]
 
     def form_valid(self, form):
+        request = self.request
         blog = form.save(commit=False)
         blog.author = self.request.user
         blog.save()
+
+        for new_form in self.text_or_image_forms:
+            if 'text' in new_form:
+                if not request.POST.get(new_form):
+                    return HttpResponseNotModified
+                else:
+                    blog.text_or_image.create(text=request.POST.get(new_form), image=None)
+            elif 'image' in new_form:
+                if not request.POST.get(new_form):
+                    return HttpResponseNotModified
+                else:
+                    blog.text_or_image.create(text=None, image=request.POST.get(new_form))
         return super().form_valid(form)
 
     def get(self, request, *args, **kwargs):
@@ -117,35 +133,6 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
         data['body_forms'] = self.text_or_image_forms
         data['number_of_forms'] = self.number_of_forms
         return data
-
-    def post(self, request, *args, **kwargs):
-        texts = []
-        if request.POST.get('text'):
-            for i in range(len(request.POST.get('text'))):
-                if request.POST.get('text')[i] == '':
-                    return HttpResponseNotModified
-                else:
-                    texts.append(request.POST.get('text')[i])
-        images = []
-        if request.POST.get('image'):
-            for image in request.POST.get('image'):
-                if image == '':
-                    return HttpResponseNotModified
-                else:
-                    images.append(image)
-
-        if self.text_or_image_forms:
-            for form in self.text_or_image_forms:
-                if form == TextCreationForm:
-                    new_text = TextOrImage(blog=self.get_object(), text=texts[0], image=None)
-                    new_text.save()
-                    del(texts[0])
-                if form == ImageCreationForm:
-                    new_image = TextOrImage(blog=self.get_object(), image=image[0], text=None)
-                    new_image.save()
-                    del(image[0])
-
-        return super().post(request, *args, **kwargs)
 
 
 class AboutView(TemplateView):
