@@ -1,4 +1,8 @@
-from django.shortcuts import redirect
+import os
+from django.core.files.images import ImageFile
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from django.conf import settings
 from django.http import HttpResponseNotModified, HttpResponse
 from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -55,9 +59,6 @@ class BlogDetailView(DetailView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
 
-        text_or_image = TextOrImage.objects.filter(blog=self.get_object())
-        data['text_or_image'] = text_or_image
-
         comments = BlogCommentModel.objects.filter(
             blog=self.get_object()).order_by('-date_posted')
         data['comments'] = comments
@@ -93,21 +94,30 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         request = self.request
+
+        """for new_form in self.text_or_image_forms:
+            if 'text' in new_form:
+                if not request.POST.get(new_form):
+                    return HttpResponseNotModified
+            elif 'image' in new_form:
+                if not request.POST.get(new_form):
+                    return HttpResponseNotModified"""
+
         blog = form.save(commit=False)
         blog.author = self.request.user
         blog.save()
 
-        for new_form in self.text_or_image_forms:
+        for i, new_form in enumerate(self.text_or_image_forms):
             if 'text' in new_form:
-                if not request.POST.get(new_form):
-                    return HttpResponseNotModified
-                else:
-                    blog.text_or_image.create(text=request.POST.get(new_form), image=None)
-            elif 'image' in new_form:
-                if not request.POST.get(new_form):
-                    return HttpResponseNotModified
-                else:
-                    blog.text_or_image.create(text=None, image=request.POST.get(new_form))
+                blog.text_or_image.create(text=request.POST.get(new_form), image=None)
+            if 'image' in new_form:
+                image_path = str(int(blog.id) + 1) + '.png'
+                file = request.FILES.get(new_form)
+                path = default_storage.save(image_path, ContentFile(file.read()))
+
+                image = TextOrImage.objects.create(blog=blog, text=None)
+                image.image = ImageFile(open('media/'+path, 'rb'))
+                image.save()
         return super().form_valid(form)
 
     def get(self, request, *args, **kwargs):

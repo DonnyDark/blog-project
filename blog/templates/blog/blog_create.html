@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="bg-light container">
-    <form method="post" action="{% url 'blog_create' %}">
+    <form method="post" action="{% url 'blog_create' %}" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}
         {% include "blog/blog_text_and_image_creation_form_logic.html" %}

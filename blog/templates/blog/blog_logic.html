@@ -15,8 +15,12 @@
                         </nav>
                         <!--main blog story or image -->
                         <div class="mx-5">
-                            {% for main_info in text_or_image %}
+                            {% for main_info in blog.text_or_image.all %}
+                            {% if main_info.text %}
                             <p>{{ main_info.text }}</p>
+                            {% elif main_info.image %}
+                            <img src="{{ main_info.image.url }}">
+                            {% endif %}
                             {% endfor %}
                         </div>
                         <!-- tags -->

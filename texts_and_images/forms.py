@@ -16,6 +16,3 @@ class ImageCreationForm(forms.ModelForm):
     class Meta:
         model = TextOrImage
         fields = ['image']
-        widgets = {
-            'text': forms.ImageField()
-        }
