@@ -11,6 +11,8 @@ dj-database-url = "*"
 whitenoise = "*"
 django-crispy-forms = "*"
 pillow = "*"
+beautifulsoup4 = "*"
+requests = "*"
 
 [dev-packages]
 
