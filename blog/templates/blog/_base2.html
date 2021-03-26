@@ -2,27 +2,43 @@
 {% load static %}
 
 {% block content %}
-<div class="col-md-3 col-xl-2 bd-sidebar">
-    <div class="">
-        <form action="{% url 'main_page' %}" method="get" class="my-2 bd-search d-flex align-items-center">
-            {% csrf_token %}
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q_text">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Панель навигации</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bd-params" aria-controls="bd-params" aria-expanded="false" aria-label="Переключатель навигации">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="bd-params">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Главная</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Ссылка</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Отключенный</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Поиск">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
         </form>
     </div>
-    <div class="d-flex align-items-center">
-        <nav class="bd-links">
-            <div class="bd-toc-item">
-                <a class="bd-toc-link">New</a>
-            </div><div class="bd-toc-item">
-                <a class="bd-toc-link">The Best</a>
-            </div><div class="bd-toc-item">
-                <a class="bd-toc-link">The Most Popular</a>
-            </div>
+</nav>
+<div class="row justify-content-md-center">
+        <main class="col-md-auto col-xl-8 py-md-3 pl-md-5 bd-content" style="height: auto !important;">
+            {% block main %}
+            {% endblock %}
+        </main>
+        <nav class="col d-none d-xl-block bd-toc" aria-label="Secondary navigation">
+            <nav>
+                <ul class="section-nav">
+                    <li>
+                        <a href="#">Test</a>
+                    </li>
+                </ul>
+            </nav>
         </nav>
-    </div>
 </div>
-<main class="col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content">
-    {% block main %}
-    {% endblock %}
-</main>
 {% endblock %}
