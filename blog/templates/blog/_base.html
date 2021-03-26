@@ -19,35 +19,7 @@
 </head>
 <body>
     <div class="container">
-    <header>
-        <nav class="navbar navbar-light navbar-expand flex-column flex-md-row bd-navbar">
-            <a class="navbar-brand" href="{% url 'main_page' %}">Blog</a>
-            <ul class="navbar-nav ml-md-auto">
-                <li class="nav-item dropdown">
-                    {% if request.user.is_authenticated %}
-                        <a class="nav-item nav-link dropdown-toggle mr-md-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Hello {{ request.user.username }}
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li class="nav-item"><a class="dropdown-item" href="users/{{ request.user.username }}/">User Room</a></li>
-                            <li class="nav-item"><a class="dropdown-item" href="{% url 'blog_create' %}">Create Blog</a></li>
-                            <li class="nav-item"><a class="dropdown-item" href="{% url 'about_page' %}">About</a></li>
-                            <li class="nav-item"><a class="dropdown-item" href="{% url 'logout' %}">Log Out</a></li>
-                        </ul>
-                    {% else %}
-                        <a class="nav-item nav-link dropdown-toggle mr-md-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Menu
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li class="nav-item"><a class="dropdown-item" href="{% url 'login' %}">Log In</a></li>
-                            <li class="nav-item"><a class="dropdown-item" href="{% url 'signup' %}">Sign Up</a></li>
-                            <li class="nav-item"><a class="dropdown-item" href="{% url 'about_page' %}">About</a></li>
-                        </ul>
-                    {% endif %}
-                </li>
-            </ul>
-        </nav>
-    </header>
+    {% include "blog/header_navbar.html" %}
         <div class="row flex-xl-nowrap">
         {% block content %}
         {% endblock %}
