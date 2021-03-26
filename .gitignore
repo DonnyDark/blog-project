@@ -1,3 +1,4 @@
 .env.dev
 .env.prod
 tasks_list.txt
+blog/parsers/pikabu_parser.py

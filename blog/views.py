@@ -1,17 +1,13 @@
-import os
 from django.core.files.images import ImageFile
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
-from django.conf import settings
-from django.http import HttpResponseNotModified, HttpResponse
 from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseNotModified
 
 from .models import BlogModel, BlogCommentModel
 from .forms import BlogCreationForm, CommentCreationForm
 
-from texts_and_images.forms import TextCreationForm, ImageCreationForm
 from texts_and_images.models import TextOrImage
 
 
@@ -95,13 +91,13 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         request = self.request
 
-        """for new_form in self.text_or_image_forms:
+        for new_form in self.text_or_image_forms:
             if 'text' in new_form:
                 if not request.POST.get(new_form):
                     return HttpResponseNotModified
             elif 'image' in new_form:
                 if not request.POST.get(new_form):
-                    return HttpResponseNotModified"""
+                    return HttpResponseNotModified
 
         blog = form.save(commit=False)
         blog.author = self.request.user

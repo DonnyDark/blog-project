@@ -8,7 +8,7 @@ class BlogCreationForm(forms.ModelForm):
         fields = ['title', 'tags']
         widgets = {
             'title': forms.TextInput(attrs={'placeholder': 'Please add a title. Max: 50 characters'}),
-            'tags': forms.TextInput(attrs={'placeholder': 'Please add tags separated by commas. Max: 500 characters'})
+            'tags': forms.TextInput(attrs={'placeholder': 'Please add tags separated by spaces. Max: 500 characters'})
         }
 
 
