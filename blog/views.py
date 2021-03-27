@@ -25,7 +25,7 @@ class BlogListView(ListView):
         return data
 
     def get_queryset(self):
-        queryset = self.model.objects.all()
+        queryset = self.model.objects.all().order_by('-published_date')
 
         if self.request.GET.get('q'):
             query = self.request.GET.get('q')
