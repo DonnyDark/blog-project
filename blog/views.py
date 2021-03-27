@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.core.files.images import ImageFile
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
@@ -25,6 +26,10 @@ class BlogListView(ListView):
 
     def get_queryset(self):
         queryset = self.model.objects.all()
+
+        if self.request.GET.get('q'):
+            query = self.request.GET.get('q')
+            queryset = self.model.objects.filter(Q(title__icontains=query))
 
         if self.request.user.is_authenticated:
             user = self.request.user

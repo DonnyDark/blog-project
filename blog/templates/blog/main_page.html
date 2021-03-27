@@ -4,7 +4,9 @@
 {% block title %}Blog{% endblock %}
 
 {% block main %}
+{% include "blog/pagination.html" %}
 {% for blog in blog_objects %}
 {% include "blog/blog_logic.html" %}
 {% endfor %}
+{% include "blog/pagination.html" %}
 {% endblock %}
