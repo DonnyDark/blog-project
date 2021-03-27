@@ -2,3 +2,4 @@
 .env.prod
 tasks_list.txt
 media
+staticfiles/media-root

@@ -135,13 +135,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles', 'static-root')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_HOST = os.environ.get('STATIC_HOST', '')
-STATIC_URL = STATIC_HOST + '/static/'
 
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'staticfiles', 'media-root')
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'users.CustomUser'
