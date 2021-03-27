@@ -9,6 +9,7 @@ from .models import BlogModel, BlogCommentModel
 from .forms import BlogCreationForm, CommentCreationForm
 
 from texts_and_images.models import TextOrImage
+from users.forms import LoginForm
 
 
 class BlogListView(ListView):
@@ -16,6 +17,11 @@ class BlogListView(ListView):
     context_object_name = 'blog_objects'
     template_name = 'blog/main_page.html'
     paginate_by = 10
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['form'] = LoginForm
+        return data
 
     def get_queryset(self):
         queryset = self.model.objects.all()
@@ -54,6 +60,8 @@ class BlogDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
+
+        data['form'] = LoginForm
 
         comments = BlogCommentModel.objects.filter(
             blog=self.get_object()).order_by('-date_posted')

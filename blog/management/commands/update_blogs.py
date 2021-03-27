@@ -24,6 +24,7 @@ class Command(BaseCommand):
         for data in all_data:
             if data['order_of_main_data']:
                 blog = BlogModel(title=data['title'], author=user, tags=' '.join(data['tags']))
+                blog.save()
                 for i, main_data in enumerate(data['order_of_main_data']):
                     if type(main_data) is list:
                         for text in main_data:
@@ -35,14 +36,13 @@ class Command(BaseCommand):
                         all_bytes = b''
                         for content in r:
                             all_bytes += content
-                        if main_data[-3:] == 'jpg':
-                            pass
-                        image_path = str(int(blog.id) + i) + '.png'
-                        path = default_storage.save(image_path, ContentFile(all_bytes))
+                        if main_data:
+                            image_path = main_data[main_data.rfind('/')+1:]
+                            path = default_storage.save(image_path, ContentFile(all_bytes))
 
-                        image = TextOrImage(blog=blog)
-                        image.image = ImageFile(open('media/'+path, 'rb'))
-                        image.save()
+                            image = TextOrImage(blog=blog)
+                            image.image = ImageFile(open('media/'+path, 'rb'))
+                            image.save()
 
     def handle(self, *args, **kwargs):
         pages = kwargs['pages']

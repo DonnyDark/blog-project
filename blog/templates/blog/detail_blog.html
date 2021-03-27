@@ -1,19 +1,22 @@
 {% extends 'blog/_base2.html' %}
 {% load static %}
 
+{% load crispy_forms_tags %}
 
 {% block title %}Detail Blog{% endblock %}
 
 {% block main %}
 {% include "blog/blog_logic.html" %}
 <!-- comment section -->
+<div class="container-fluid bg-light row align-items-start my-lg-4">
+<div class="container-fluid">
 <h4 class="h4">Leave your comment!</h4>
 <div id="comment-section">
     {% if user.is_authenticated %}
-    <form method="POST">
+    <form method="POST" class="">
         {% csrf_token %}
         <div class="form-group">
-            {{ comment_form }}
+            {{ comment_form|crispy }}
             <button class="btn btn-info" type="submit">Add comment <i class="fas fa-comments"></i></button>
         </div>
     </form>
@@ -42,5 +45,7 @@
     {% else %}
         <strong class="text-secondary">No comments yet...</strong>
     {% endif %}
+</div>
+</div>
 </div>
 {% endblock %}

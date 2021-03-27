@@ -31,14 +31,16 @@
             {% block main %}
             {% endblock %}
         </main>
-        <nav class="col d-none d-xl-block bd-toc" aria-label="Secondary navigation">
-            <nav>
-                <ul class="section-nav">
-                    <li>
-                        <a href="#">Test</a>
-                    </li>
-                </ul>
-            </nav>
-        </nav>
+    <div class="col py-md-3 pl-md-5 bd-content">
+    <div class="col container-fluid bg-light row align-items-start my-lg-4" style="height: auto !important;">
+        <div class="col d-none d-xl-block bd-toc" aria-label="Secondary navigation">
+            {% if not request.user.is_authenticated %}
+                {% include "users/login_form.html" %}
+            {% else %}
+                <p>You are already logged in</p>
+            {% endif %}
+        </div>
+        </div>
+        </div>
 </div>
 {% endblock %}

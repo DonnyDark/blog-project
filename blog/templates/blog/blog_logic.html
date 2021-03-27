@@ -1,6 +1,6 @@
 {% load static %}
             <div class="container-fluid bg-light row align-items-start my-lg-4">
-                <article>
+                <article class="container-fluid">
                         <!--author, published time, group, blog title -->
                         <nav class="navbar navbar-expand-lg navbar-light bg-light ml-3">
                             <div class="navbar-nav mr-auto">
@@ -10,14 +10,16 @@
                                 </ul>
                             </div>
                         </nav>
-                        <nav class="navbar navbar-expand-lg navbar-light bg-light ml-3">
-                            <a class="nav-item navbar-brand" href="{{ blog.get_absolute_url }}">{{ blog.title }}</a>
-                        </nav>
+                        <div class="container-fluid">
+                            <a class="text-secondary" href="{{ blog.get_absolute_url }}">
+                                <p class="h3">{{ blog.title }}</p>
+                            </a>
+                        </div>
                         <!--main blog story or image -->
-                        <div class="mx-5">
+                        <div class="container-fluid">
                             {% for main_info in blog.text_or_image.all %}
                             {% if main_info.text %}
-                            <p>{{ main_info.text }}</p>
+                            <p class="">{{ main_info.text }}</p>
                             {% elif main_info.image %}
                             <img class="img-fluid" src="{{ main_info.image.url }}">
                             {% endif %}
