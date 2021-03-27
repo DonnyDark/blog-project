@@ -19,6 +19,9 @@ class BlogModel(models.Model):
     likes = GenericRelation(Like)
     views = models.IntegerField(default=0, editable=True)
 
+    class Meta:
+        ordering = ['-published_date']
+
     def __str__(self):
         return self.title + ', ' + self.author.username
 
