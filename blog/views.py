@@ -4,7 +4,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseForbidden, HttpResponseNotModified
+from django.http import HttpResponseForbidden, HttpResponseNotModified, HttpResponse
 
 from .models import BlogModel, BlogCommentModel
 from .forms import BlogCreationForm, CommentCreationForm
@@ -101,6 +101,11 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
     text_or_image_forms = []
     number_of_forms = [0, ]
 
+    def get_files_from_post_request(self):
+        if self.request.FILES:
+            for file in self.request.FILES:
+                yield self.request.FILES[file]
+
     def form_valid(self, form):
         request = self.request
 
@@ -120,12 +125,15 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
             if 'text' in new_form:
                 blog.text_or_image.create(text=request.POST.get(new_form), image=None)
             if 'image' in new_form:
-                image_path = str(int(blog.id) + 1) + '.png'
-                file = request.FILES.get(new_form)
-                path = default_storage.save(image_path, ContentFile(file.read()))
-
-                image = TextOrImage.objects.create(blog=blog, text=None)
-                image.image = ImageFile(open('media/'+path, 'rb'))
+                uploaded_files = self.get_files_from_post_request()
+                try:
+                    uploaded_file = next(uploaded_files)
+                except StopIteration:
+                    pass
+                uploaded_file_name = str(blog.id) + str(uploaded_file.name)
+                uploaded_file_data = ContentFile(uploaded_file.read())
+                image = TextOrImage(blog=blog, text=None)
+                image.image.save(uploaded_file_name, uploaded_file_data)
                 image.save()
         return super().form_valid(form)
 

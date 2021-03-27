@@ -38,10 +38,11 @@ class Command(BaseCommand):
                             all_bytes += content
                         if main_data:
                             image_path = main_data[main_data.rfind('/')+1:]
-                            path = default_storage.save(image_path, ContentFile(all_bytes))
+                            image_name = str(blog.id) + image_path
+                            image_data = ContentFile(all_bytes)
 
-                            image = TextOrImage(blog=blog)
-                            image.image = ImageFile(open('media/'+path, 'rb'))
+                            image = TextOrImage(blog=blog, text=None)
+                            image.image.save(image_name, image_data)
                             image.save()
 
     def handle(self, *args, **kwargs):
