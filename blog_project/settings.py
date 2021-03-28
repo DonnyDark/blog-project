@@ -140,7 +140,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_HOST = os.environ.get('STATIC_HOST', '')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'staticfiles', 'media-root')
-MEDIA_URL = '/media/'
+MEDIA_URL = '/staticfiles/media-root/'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 AUTHENTICATION_BACKENDS = ['users.backends.CustomBackend']
