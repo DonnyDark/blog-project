@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="bg-light container">
-    <form method="post" action="{% url 'blog_create' %}" enctype="multipart/form-data">
+    <form method="post" action="{% url 'blog_create' %}">
         {% csrf_token %}
         {{ form|crispy }}
         {% include "blog/blog_text_and_image_creation_form_logic.html" %}
@@ -14,7 +14,7 @@
     </form>
     <form method="get">
         {% csrf_token %}
-        <button class="btn btn-outline-primary" name="image" value="image">Add Image</button>
+        <button class="btn btn-outline-primary" name="image_url" value="image_url">Add Image URL</button>
         <button class="btn btn-outline-primary" name="text" value="text">Add Text</button>
         <button class="btn btn-outline-primary" name="delete_form" value="delete">Delete Form</button>
     </form>

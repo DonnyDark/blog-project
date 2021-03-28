@@ -16,3 +16,12 @@ class ImageCreationForm(forms.ModelForm):
     class Meta:
         model = TextOrImage
         fields = ['image']
+
+
+class ImageUrlCreationForm(forms.ModelForm):
+    class Meta:
+        model = TextOrImage
+        fields =['image_url']
+        widgets = {
+            'image_url': forms.URLInput(attrs={'placeholder': 'Input your url...'})
+        }

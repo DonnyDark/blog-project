@@ -7,12 +7,10 @@
     <div class="">
         <textarea class="textarea form-control" name="{{ name }}" cols="80" rows="5" placeholder="Starting typing your article..."></textarea>
     </div>
-    {% elif 'image' in name %}
-    <label class="">Image</label>
+    {% elif 'image_url' in name %}
+    <label class="">Image URL</label>
     <div class="">
-        <input class="clearablefileinput form-control-file" type="file" name="{{ name }}" accept="images/">
-        {% block image %}
-        {% endblock %}
+        <input class="urlinput form-control" type="url" name="{{ name }}" placeholder="Input your url..." maxlength="200">
     </div>
     {% endif %}
     {% endfor %}
