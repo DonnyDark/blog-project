@@ -16,7 +16,7 @@
                             </a>
                         </div>
                         <!--main blog story or image -->
-                        <div class="container-fluid">
+                        <div class="container-fluid py-1">
                             {% for main_info in blog.text_or_image.all %}
                             {% if main_info.text %}
                             <p class="">{{ main_info.text }}</p>
@@ -27,15 +27,13 @@
                             {% endfor %}
                         </div>
                         <!-- tags -->
-                        <nav class="navbar navbar-expand-lg navbar-light bg-light ml-3">
-                            <div class="navbar-nav mr-auto">
-                                <ul class="navbar-nav bd-navbar-nav flex-row">
-                                    <li class="nav-item px-1">
-                                        <p class="text-xl-left" >{{ blog.tags }}</p>
-                                    </li>
-                                </ul>
+                            <div class="container-fluid py-2">
+                                {% if blog.tags_list %}
+                                {% for tag in blog.tags_list %}
+                                    <a class="text-secondary" href="/?q_tag={{ tag }}">{{ tag }}</a>
+                                {% endfor %}
+                                {% endif %}
                             </div>
-                        </nav>
                         <!-- likes, comments, views, and others -->
                         <nav class="navbar navbar-expand-lg navbar-light bg-light ml-3">
                             <div class="navbar-nav mr-auto">

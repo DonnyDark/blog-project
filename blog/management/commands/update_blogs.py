@@ -1,12 +1,5 @@
-import requests
-
-from PIL import Image
-
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
-from django.core.files.images import ImageFile
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
 
 from blog.models import BlogModel
 from blog.parsers import pikabu_parser
@@ -23,7 +16,7 @@ class Command(BaseCommand):
         user = get_user_model().objects.first()
         for data in all_data:
             if data['order_of_main_data']:
-                blog = BlogModel(title=data['title'], author=user, tags=' '.join(data['tags']))
+                blog = BlogModel(title=data['title'], author=user, tags='#'+' #'.join(data['tags']))
                 blog.save()
                 for i, main_data in enumerate(data['order_of_main_data']):
                     if type(main_data) is list:

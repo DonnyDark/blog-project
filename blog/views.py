@@ -1,5 +1,4 @@
 from django.db.models import Q
-from django.core.files.base import ContentFile
 from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden, HttpResponseNotModified, HttpResponse
@@ -29,6 +28,10 @@ class BlogListView(ListView):
             query = self.request.GET.get('q')
             queryset = self.model.objects.filter(Q(title__icontains=query))
 
+        if self.request.GET.get('q_tag'):
+            tag_query = self.request.GET.get('q_tag')
+            queryset = self.model.objects.filter(Q(tags__icontains=tag_query))
+
         if self.request.user.is_authenticated:
             user = self.request.user
             for query in queryset:
@@ -36,6 +39,12 @@ class BlogListView(ListView):
                     query.is_liked = True
                 else:
                     query.is_liked = False
+
+        for query in queryset:
+            if query.tags:
+                query.tags_list = query.tags.split(' #')
+                for i in range(1, len(query.tags_list)):
+                    query.tags_list[i] = '#' + query.tags_list[i]
         return queryset
 
 
@@ -53,6 +62,11 @@ class BlogDetailView(DetailView):
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
+        if obj.tags:
+            tags_list = obj.tags.split(' #')
+            for i in range(1, len(tags_list)):
+                tags_list[i] = '#' + tags_list[1]
+            obj.tags_list = tags_list
         if self.request.user.is_authenticated:
             user = self.request.user
             if obj.likes.filter(user=user):
@@ -99,19 +113,26 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
     text_or_image_forms = []
     number_of_forms = [0, ]
 
+    def form_invalid(self, form):
+        if self.request.POST.get('tags'):
+            if '#' not in self.request.POST.get('tags'):
+                return super().form_invalid(form)
+
     def form_valid(self, form):
         request = self.request
 
         for new_form in self.text_or_image_forms:
             if 'text' in new_form:
                 if not request.POST.get(new_form):
-                    return HttpResponseNotModified
+                    return self.form_invalid(form)
             elif 'image_url' in new_form:
                 if not request.POST.get(new_form):
-                    return HttpResponseNotModified
+                    return self.form_invalid(form)
 
         blog = form.save(commit=False)
         blog.author = self.request.user
+        if '#' not in blog.tags:
+            blog.tags = '#' + blog.tags
         blog.save()
 
         for i, new_form in enumerate(self.text_or_image_forms):
