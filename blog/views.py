@@ -1,6 +1,4 @@
 from django.db.models import Q
-from django.core.files.images import ImageFile
-from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin

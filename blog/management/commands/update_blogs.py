@@ -31,19 +31,8 @@ class Command(BaseCommand):
                             new_text = TextOrImage(blog=blog, text=text)
                             new_text.save()
                     else:
-                        r = requests.get(url=main_data, stream=True)
-                        r.raw.decode_content = True
-                        all_bytes = b''
-                        for content in r:
-                            all_bytes += content
-                        if main_data:
-                            image_path = main_data[main_data.rfind('/')+1:]
-                            image_name = str(blog.id) + image_path
-                            image_data = ContentFile(all_bytes)
-
-                            image = TextOrImage(blog=blog, text=None)
-                            image.image.save(image_name, image_data)
-                            image.save()
+                        image_url = TextOrImage(blog=blog, image_url=main_data)
+                        image_url.save()
 
     def handle(self, *args, **kwargs):
         pages = kwargs['pages']

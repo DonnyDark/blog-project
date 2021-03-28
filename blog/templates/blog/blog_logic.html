@@ -20,8 +20,9 @@
                             {% for main_info in blog.text_or_image.all %}
                             {% if main_info.text %}
                             <p class="">{{ main_info.text }}</p>
-                            {% elif main_info.image %}
-                            <img class="img-fluid" src="{{ main_info.image.url }}">
+                            {% endif %}
+                            {% if main_info.image_url %}
+                            <img class="img-fluid" src="{{ main_info.image_url }}">
                             {% endif %}
                             {% endfor %}
                         </div>
@@ -45,7 +46,7 @@
                                     <li class="nav-item px-1">
                                             <a class="nav-link" href="{{ blog.get_absolute_url }}">
                                                 <span>
-                                                    <img class="comment-icon" src="{% static 'blog/images/comment-icon.webp' %}">
+                                                    <img class="comment-icon" src="https://cdn.iconscout.com/icon/premium/png-256-thumb/comment-2347950-1966232.png">
                                                 </span>
                                                 <span>{{ blog.number_of_comments }}</span>
                                             </a>
@@ -53,7 +54,7 @@
                                     <li class="nav-item px-1">
                                             <a class="nav-link" href="{{ blog.get_absolute_url }}">
                                                 <span>
-                                                    <img class="viewed-icon" src="{% static 'blog/images/viewed.png' %}">
+                                                    <img class="viewed-icon" src="https://cdn1.iconfinder.com/data/icons/reading-8/384/Viewed-128.png">
                                                 </span>
                                                 <span>{{ blog.views }}</span>
                                             </a>
