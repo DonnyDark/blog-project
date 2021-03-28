@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(os.environ.get('DEBUG'))
+DEBUG = 0
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split()
 
@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
 
     # 3rd party
@@ -135,9 +134,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles', 'static-root')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-STATIC_HOST = os.environ.get('STATIC_HOST', '')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles', 'static')
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATIC_HOST = os.environ.get('STATIC_HOST', '')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'staticfiles', 'media-root')
 MEDIA_URL = '/staticfiles/media-root/'
