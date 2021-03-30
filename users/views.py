@@ -2,8 +2,11 @@ from django.contrib.auth import views as auth_views
 from django.views import generic
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import LoginForm, RegisterForm
+
+from blog.models import BlogModel
 
 
 UserModel = get_user_model()
@@ -20,10 +23,19 @@ class SignupView(generic.CreateView):
     success_url = reverse_lazy('login')
 
 
-class UserView(generic.DetailView):
+class UserView(LoginRequiredMixin, generic.DetailView):
     template_name = 'users/user.html'
     context_object_name = 'user'
 
-    def get_queryset(self):
-        queryset = UserModel.objects.filter(username=self.request.user.username)
-        return queryset
+    def get_object(self, queryset=None):
+        user = UserModel.objects.get(username=self.request.user.username)
+        return user
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        user_blogs = BlogModel.objects.filter(author=self.get_object())
+        data['user_blogs'] = user_blogs
+        return data
+
+

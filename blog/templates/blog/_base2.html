@@ -26,14 +26,13 @@
         </form>
     </div>
 </nav>
-
-<div class="row justify-content-md-center">
-        <main class="col-md-auto col-xl-8 py-md-3 pl-md-5 bd-content" style="height: auto !important;">
+<div class="row">
+        <main class="col-lg-auto col-lg-8 py-3 mx-3 bd-content" style="height: auto !important;">
             {% block main %}
             {% endblock %}
         </main>
-    <div class="col py-md-3 pl-md-5 bd-content">
-    <div class="col container-fluid bg-light row align-items-start my-lg-4" style="height: auto !important;">
+    <div class="col py-md-3 px-md-3 bd-content">
+    <div class="bg-light align-items-center my-lg-4" style="height: auto !important;">
         <div class="col d-none d-xl-block bd-toc" aria-label="Secondary navigation">
             {% if not request.user.is_authenticated %}
                 {% include "users/login_form.html" %}
