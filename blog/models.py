@@ -16,8 +16,11 @@ class BlogModel(models.Model):
     title = models.CharField(max_length=150)
     published_date = models.DateTimeField(default=timezone.now, editable=True)
     tags = models.CharField(max_length=500)
+
     likes = GenericRelation(Like)
     views = models.IntegerField(default=0, editable=True)
+
+    reposts = models.ManyToManyField(UserModel, related_name='reposts')
 
     class Meta:
         ordering = ['-published_date']
@@ -35,6 +38,9 @@ class BlogModel(models.Model):
     @property
     def total_likes(self):
         return self.likes.count()
+
+    def total_reposts(self):
+        return self.reposts.count()
 
 
 class BlogCommentModel(models.Model):

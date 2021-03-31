@@ -39,6 +39,15 @@ class BlogListView(ListView):
                     query.is_liked = True
                 else:
                     query.is_liked = False
+                if query.author == user:
+                    query.is_author_of_blog = True
+                else:
+                    query.is_author_of_blog = False
+                if query.reposts.filter(username=user.username):
+                    query.is_reposted = True
+                else:
+                    query.is_reposted = False
+                query.total_reposts = query.total_reposts()
 
         for query in queryset:
             if query.tags:
@@ -62,17 +71,29 @@ class BlogDetailView(DetailView):
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
+
         if obj.tags:
             tags_list = obj.tags.split(' #')
             for i in range(1, len(tags_list)):
                 tags_list[i] = '#' + tags_list[1]
             obj.tags_list = tags_list
+
         if self.request.user.is_authenticated:
             user = self.request.user
             if obj.likes.filter(user=user):
                 obj.is_liked = True
             else:
                 obj.is_liked = False
+            if obj.author == self.request.user:
+                obj.is_author_of_blog = True
+            else:
+                obj.is_author_ob_blog = False
+            if obj.reposts.filter(username=user.username):
+                obj.is_reposted = True
+            else:
+                obj.is_reposted = False
+
+        obj.total_reposts = obj.total_reposts()
         return obj
 
     def get_context_data(self, **kwargs):
@@ -89,20 +110,30 @@ class BlogDetailView(DetailView):
 
     def post(self, request, *args, **kwargs):
         obj = self.get_object()
+        if self.request.user.is_authenticated:
+            user = self.request.user
+        else:
+            return HttpResponseForbidden()
+
         if request.POST.get('like'):
-            if self.request.user.is_authenticated:
-                user = self.request.user
-                if obj.likes.filter(user=user):
-                    obj.likes.filter(user=user).delete()
-                else:
-                    obj.likes.create(user=user)
+            if obj.likes.filter(user=user):
+                obj.likes.filter(user=user).delete()
             else:
-                return HttpResponseForbidden
+                obj.likes.create(user=user)
         elif request.POST.get('text'):
             new_comment = BlogCommentModel(text=request.POST.get('text'),
-                                           author=self.request.user,
+                                           author=user,
                                            blog=self.get_object())
             new_comment.save()
+        elif request.POST.get('repost'):
+            if obj.author == user:
+                return HttpResponse("You can't reposts your own blog!!!")
+            else:
+                if obj.reposts.filter(username=user.username):
+                    obj.reposts.remove(user)
+                else:
+                    obj.reposts.add(user)
+
         return self.get(self, request, *args, **kwargs)
 
 

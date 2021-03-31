@@ -1,0 +1,7 @@
+{% load static %}
+
+<div>
+    {% for blog in queryset %}
+    {% include 'blog/blog_logic.html' %}
+    {% endfor %}
+</div>

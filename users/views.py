@@ -36,6 +36,27 @@ class UserView(LoginRequiredMixin, generic.DetailView):
 
         user_blogs = BlogModel.objects.filter(author=self.get_object())
         data['user_blogs'] = user_blogs
+        data['queryset'] = self.get_queryset()
+        if self.request.GET.get('q'):
+            if self.request.GET.get('q') == 'user_reposts':
+                data['blogs'] = 'user_reposts'
+            elif self.request.GET.get('q') == 'user_blogs':
+                data['blogs'] = 'user_blogs'
         return data
 
+    def get_queryset(self):
+        if self.request.GET.get('q'):
+            if self.request.GET.get('q') == 'user_reposts':
+                queryset = self.get_object().reposts.all()
+            elif self.request.GET.get('q') == 'user_blogs':
+                queryset = BlogModel.objects.filter(author=self.get_object())
+            else:
+                queryset = None
 
+            if queryset:
+                for query in queryset:
+                    if query.reposts.filter(username=self.get_object().username):
+                        query.is_reposted = True
+                    else:
+                        query.is_reposted = False
+            return queryset

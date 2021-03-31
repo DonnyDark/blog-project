@@ -1,8 +1,31 @@
 {% extends 'blog/_base.html' %}
 
-{% block title %}SignUp{% endblock %}
+{% block title %}User Page{% endblock %}
 
 {% block content %}
-<h1>User Page</h1>
-<h3>Here should be user information!</h3>
+<div class="my-3 col-md-auto">
+    <div class="my-3 bg-light">
+        <h4>User Information</h4>
+    </div>
+    <div class="my-3 bg-light">
+        <h6>Username: {{ user.username }}</h6>
+        <h6>User Email: {{ user.email }}</h6>
+    </div>
+    <div class="my-3 bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <ul class="navbar-nav bd-navbar-nav flex-row">
+                <li class="nav-item px-1">
+                    <a class="nav-link" href="{{ request.path }}?q=user_blogs">User Blogs</a>
+                </li>
+                <li class="nav-item px-1">
+                    <a class="nav-link" href="{{ request.path }}?q=user_reposts">Reposts</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<div class="my-3 col-md-auto">
+    <h5>{{ blogs }}</h5>
+{% include 'users/user_reposts_and_blogs.html' %}
+</div>
 {% endblock %}
