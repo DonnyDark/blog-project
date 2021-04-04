@@ -2,45 +2,17 @@
 {% load static %}
 
 {% block content %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Search</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bd-params" aria-controls="bd-params" aria-expanded="false" aria-label="Переключатель навигации">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="bd-params">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#"></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#"></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#"></a>
-            </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0" method="get" action="{% url 'main_page' %}">
-            <input class="form-control mr-sm-2" name="q" type="text" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
-        </form>
+<div class="row align-items-start">
+    <div class="col-auto col-sm-9 bg-white">
+        {% block main %}
+        {% endblock %}
     </div>
-</nav>
-<div class="row px-3">
-        <main class="col-lg-auto col-lg-8 py-3 bd-content" style="height: auto !important;">
-            {% block main %}
-            {% endblock %}
-        </main>
-    <div class="col py-md-3 pl-md-3 bd-content">
-    <div class="bg-light align-items-center my-lg-4" style="height: auto !important;">
-        <div class="col d-none d-xl-block bd-toc" aria-label="Secondary navigation">
-            {% if not request.user.is_authenticated %}
+    <div class="col bg-white">
+        {% if not request.user.is_authenticated %}
                 {% include "users/login_form.html" %}
             {% else %}
                 <p>You are already logged in</p>
             {% endif %}
-        </div>
-        </div>
-        </div>
+    </div>
 </div>
 {% endblock %}
