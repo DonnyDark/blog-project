@@ -3,11 +3,11 @@
 
 {% block content %}
 <div class="row align-items-start">
-    <div class="col-auto col-sm-9 bg-white">
+    <div class="col-auto col-sm-9 bg-light mx-3">
         {% block main %}
         {% endblock %}
     </div>
-    <div class="col bg-white">
+    <div class="col bg-white mx-3">
         {% if not request.user.is_authenticated %}
                 {% include "users/login_form.html" %}
             {% else %}
